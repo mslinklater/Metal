@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3B479C942BEF4F1E000C45FA /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C932BEF4F1E000C45FA /* AppDelegate.m */; };
-		3B479C972BEF4F1E000C45FA /* Renderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C962BEF4F1E000C45FA /* Renderer.m */; };
-		3B479C9A2BEF4F1E000C45FA /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C992BEF4F1E000C45FA /* GameViewController.m */; };
+		3B479C972BEF4F1E000C45FA /* RendererObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C962BEF4F1E000C45FA /* RendererObjC.m */; };
+		3B479C9A2BEF4F1E000C45FA /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C992BEF4F1E000C45FA /* GameViewController.mm */; };
 		3B479C9C2BEF4F1E000C45FA /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3B479C9B2BEF4F1E000C45FA /* Shaders.metal */; };
 		3B479C9F2BEF4F1F000C45FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B479C9E2BEF4F1F000C45FA /* Assets.xcassets */; };
 		3B479CA22BEF4F1F000C45FA /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3B479CA12BEF4F1F000C45FA /* Base */; };
@@ -18,6 +18,10 @@
 		3B479CB92BEF4F1F000C45FA /* DefaultGameUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479CB82BEF4F1F000C45FA /* DefaultGameUITests.m */; };
 		3B479CBB2BEF4F1F000C45FA /* DefaultGameUITestsLaunchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479CBA2BEF4F1F000C45FA /* DefaultGameUITestsLaunchTests.m */; };
 		3B479CDC2BF4089A000C45FA /* MetalDeviceInspection.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B479CDB2BF4089A000C45FA /* MetalDeviceInspection.m */; };
+		3B479D062BF47FAA000C45FA /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D042BF47FAA000C45FA /* Renderer.cpp */; };
+		3B479D0C2BF5142B000C45FA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B479D0B2BF5142B000C45FA /* Foundation.framework */; };
+		3B479D0E2BF51436000C45FA /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B479D0D2BF51436000C45FA /* QuartzCore.framework */; };
+		3B479D102BF5143F000C45FA /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B479D0F2BF5143F000C45FA /* Metal.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,10 +45,10 @@
 		3B479C8F2BEF4F1E000C45FA /* DefaultGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DefaultGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B479C922BEF4F1E000C45FA /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3B479C932BEF4F1E000C45FA /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3B479C952BEF4F1E000C45FA /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		3B479C962BEF4F1E000C45FA /* Renderer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Renderer.m; sourceTree = "<group>"; };
+		3B479C952BEF4F1E000C45FA /* RendererObjC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RendererObjC.h; sourceTree = "<group>"; };
+		3B479C962BEF4F1E000C45FA /* RendererObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RendererObjC.m; sourceTree = "<group>"; };
 		3B479C982BEF4F1E000C45FA /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		3B479C992BEF4F1E000C45FA /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		3B479C992BEF4F1E000C45FA /* GameViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
 		3B479C9B2BEF4F1E000C45FA /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		3B479C9D2BEF4F1E000C45FA /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		3B479C9E2BEF4F1F000C45FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -59,6 +63,12 @@
 		3B479CC72BF1E0E9000C45FA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		3B479CDB2BF4089A000C45FA /* MetalDeviceInspection.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetalDeviceInspection.m; sourceTree = "<group>"; };
 		3B479CDD2BF408C0000C45FA /* MetalDeviceInspection.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalDeviceInspection.h; sourceTree = "<group>"; };
+		3B479D042BF47FAA000C45FA /* Renderer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
+		3B479D052BF47FAA000C45FA /* Renderer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Renderer.hpp; sourceTree = "<group>"; };
+		3B479D072BF4808A000C45FA /* Questions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Questions.md; sourceTree = "<group>"; };
+		3B479D0B2BF5142B000C45FA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		3B479D0D2BF51436000C45FA /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		3B479D0F2BF5143F000C45FA /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +76,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B479D102BF5143F000C45FA /* Metal.framework in Frameworks */,
+				3B479D0E2BF51436000C45FA /* QuartzCore.framework in Frameworks */,
+				3B479D0C2BF5142B000C45FA /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +106,7 @@
 				3B479CAD2BEF4F1F000C45FA /* DefaultGameTests */,
 				3B479CB72BEF4F1F000C45FA /* DefaultGameUITests */,
 				3B479C902BEF4F1E000C45FA /* Products */,
+				3B479D0A2BF5142B000C45FA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,19 +123,18 @@
 		3B479C912BEF4F1E000C45FA /* DefaultGame */ = {
 			isa = PBXGroup;
 			children = (
+				3B479D092BF480CC000C45FA /* Renderer */,
+				3B479D082BF480B9000C45FA /* Docs */,
 				3B479C922BEF4F1E000C45FA /* AppDelegate.h */,
 				3B479C932BEF4F1E000C45FA /* AppDelegate.m */,
-				3B479C952BEF4F1E000C45FA /* Renderer.h */,
-				3B479C962BEF4F1E000C45FA /* Renderer.m */,
 				3B479C982BEF4F1E000C45FA /* GameViewController.h */,
-				3B479C992BEF4F1E000C45FA /* GameViewController.m */,
+				3B479C992BEF4F1E000C45FA /* GameViewController.mm */,
 				3B479C9B2BEF4F1E000C45FA /* Shaders.metal */,
 				3B479C9D2BEF4F1E000C45FA /* ShaderTypes.h */,
 				3B479C9E2BEF4F1F000C45FA /* Assets.xcassets */,
 				3B479CA02BEF4F1F000C45FA /* Main.storyboard */,
 				3B479CA32BEF4F1F000C45FA /* main.m */,
 				3B479CA52BEF4F1F000C45FA /* DefaultGame.entitlements */,
-				3B479CC72BF1E0E9000C45FA /* README.md */,
 				3B479CDB2BF4089A000C45FA /* MetalDeviceInspection.m */,
 				3B479CDD2BF408C0000C45FA /* MetalDeviceInspection.h */,
 			);
@@ -143,6 +156,36 @@
 				3B479CBA2BEF4F1F000C45FA /* DefaultGameUITestsLaunchTests.m */,
 			);
 			path = DefaultGameUITests;
+			sourceTree = "<group>";
+		};
+		3B479D082BF480B9000C45FA /* Docs */ = {
+			isa = PBXGroup;
+			children = (
+				3B479CC72BF1E0E9000C45FA /* README.md */,
+				3B479D072BF4808A000C45FA /* Questions.md */,
+			);
+			path = Docs;
+			sourceTree = "<group>";
+		};
+		3B479D092BF480CC000C45FA /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				3B479C952BEF4F1E000C45FA /* RendererObjC.h */,
+				3B479C962BEF4F1E000C45FA /* RendererObjC.m */,
+				3B479D042BF47FAA000C45FA /* Renderer.cpp */,
+				3B479D052BF47FAA000C45FA /* Renderer.hpp */,
+			);
+			path = Renderer;
+			sourceTree = "<group>";
+		};
+		3B479D0A2BF5142B000C45FA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3B479D0F2BF5143F000C45FA /* Metal.framework */,
+				3B479D0D2BF51436000C45FA /* QuartzCore.framework */,
+				3B479D0B2BF5142B000C45FA /* Foundation.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -276,9 +319,10 @@
 			files = (
 				3B479CA42BEF4F1F000C45FA /* main.m in Sources */,
 				3B479C9C2BEF4F1E000C45FA /* Shaders.metal in Sources */,
-				3B479C972BEF4F1E000C45FA /* Renderer.m in Sources */,
+				3B479C972BEF4F1E000C45FA /* RendererObjC.m in Sources */,
 				3B479CDC2BF4089A000C45FA /* MetalDeviceInspection.m in Sources */,
-				3B479C9A2BEF4F1E000C45FA /* GameViewController.m in Sources */,
+				3B479D062BF47FAA000C45FA /* Renderer.cpp in Sources */,
+				3B479C9A2BEF4F1E000C45FA /* GameViewController.mm in Sources */,
 				3B479C942BEF4F1E000C45FA /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +423,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/metal-cpp";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -434,6 +479,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/metal-cpp";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MTL_ENABLE_DEBUG_INFO = NO;
