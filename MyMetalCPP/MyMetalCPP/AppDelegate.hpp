@@ -14,7 +14,7 @@ class MTKViewDelegate;
 class AppDelegate : public NS::ApplicationDelegate
 {
 public:
-    ~AppDelegate();
+    virtual ~AppDelegate();
 
     NS::Menu* createMenuBar();
 
