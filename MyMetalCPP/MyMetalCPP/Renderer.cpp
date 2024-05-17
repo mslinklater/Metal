@@ -6,11 +6,14 @@
 //
 
 #include "Renderer.hpp"
+#include "MetalDebugDump.hpp"
 #include <simd/simd.h>
 
 Renderer::Renderer( MTL::Device* pDevice )
 : _pDevice( pDevice->retain() )
 {
+    MetalDebugDump(pDevice);
+    
     _pCommandQueue = _pDevice->newCommandQueue();   // already retained as 'new'
     buildShaders();
     buildBuffers();
@@ -39,15 +42,19 @@ void Renderer::buildShaders()
              half3 color;
          };
 
-         v2f vertex vertexMain( uint vertexId [[vertex_id]],
-                                device const float3* positions [[buffer(0)]],
-                                device const float3* colors [[buffer(1)]] )
-         {
-             v2f o;
-             o.position = float4( positions[ vertexId ], 1.0 );
-             o.color = half3 ( colors[ vertexId ] );
-             return o;
-         }
+        struct VertexData
+        {
+            device float3* positions [[id(0)]];
+            device float3* colors [[id(1)]];
+        };
+
+        v2f vertex vertexMain( device const VertexData* vertexData [[buffer(0)]], uint vertexId [[vertex_id]] )
+        {
+            v2f o;
+            o.position = float4( vertexData->positions[ vertexId ], 1.0 );
+            o.color = half3(vertexData->colors[ vertexId ]);
+            return o;
+        }
 
          half4 fragment fragmentMain( v2f in [[stage_in]] )
          {
@@ -71,7 +78,7 @@ void Renderer::buildShaders()
      pDesc->setFragmentFunction( pFragFn );
      pDesc->colorAttachments()->object(0)->setPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
 
-     _pPSO = _pDevice->newRenderPipelineState( pDesc, &pError );
+     _pPSO = _pDevice->newRenderPipelineState( pDesc, &pError );    // EXPENSIVE...
      if ( !_pPSO )
      {
          __builtin_printf( "%s", pError->localizedDescription()->utf8String() );
@@ -81,55 +88,77 @@ void Renderer::buildShaders()
      pVertexFn->release();
      pFragFn->release();
      pDesc->release();
-     pLibrary->release();
+    _pShaderLibrary = pLibrary;
+//     pLibrary->release();
 
 }
 
 void Renderer::buildBuffers()
 {
     const size_t NumVertices = 3;
-
+    
     simd::float3 positions[NumVertices] =
     {
         { -0.8f,  0.8f, 0.0f },
         {  0.0f, -0.8f, 0.0f },
         { +0.8f,  0.8f, 0.0f }
     };
-
+    
     simd::float3 colors[NumVertices] =
     {
         {  1.0, 0.3f, 0.2f },
         {  0.8f, 1.0, 0.0f },
         {  0.8f, 0.0f, 1.0 }
     };
-
+    
     const size_t positionsDataSize = NumVertices * sizeof( simd::float3 );
     const size_t colorDataSize = NumVertices * sizeof( simd::float3 );
-
+    
     MTL::Buffer* pVertexPositionsBuffer = _pDevice->newBuffer( positionsDataSize, MTL::ResourceStorageModeManaged );
     MTL::Buffer* pVertexColorsBuffer = _pDevice->newBuffer( colorDataSize, MTL::ResourceStorageModeManaged );
-
+    
     _pVertexPositionsBuffer = pVertexPositionsBuffer;
     _pVertexColorsBuffer = pVertexColorsBuffer;
-
+    
     memcpy( _pVertexPositionsBuffer->contents(), positions, positionsDataSize );
     memcpy( _pVertexColorsBuffer->contents(), colors, colorDataSize );
-
+    
     _pVertexPositionsBuffer->didModifyRange( NS::Range::Make( 0, _pVertexPositionsBuffer->length() ) );
     _pVertexColorsBuffer->didModifyRange( NS::Range::Make( 0, _pVertexColorsBuffer->length() ) );
-}
+    
+    using NS::StringEncoding::UTF8StringEncoding;
+    assert( _pShaderLibrary );
+
+    MTL::Function* pVertexFn = _pShaderLibrary->newFunction( NS::String::string( "vertexMain", UTF8StringEncoding ) );
+    MTL::ArgumentEncoder* pArgEncoder = pVertexFn->newArgumentEncoder( 0 );
+
+    MTL::Buffer* pArgBuffer = _pDevice->newBuffer( pArgEncoder->encodedLength(), MTL::ResourceStorageModeManaged );
+    _pArgBuffer = pArgBuffer;
+
+    pArgEncoder->setArgumentBuffer( _pArgBuffer, 0 );
+
+    pArgEncoder->setBuffer( _pVertexPositionsBuffer, 0, 0 );
+    pArgEncoder->setBuffer( _pVertexColorsBuffer, 0, 1 );
+
+    _pArgBuffer->didModifyRange( NS::Range::Make( 0, _pArgBuffer->length() ) );
+
+    pVertexFn->release();
+    pArgEncoder->release();}
 
 void Renderer::draw(MTK::View *pView)
 {
     NS::AutoreleasePool* pPool = NS::AutoreleasePool::alloc()->init();
     
-    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer(); // autoreleased ?
     MTL::RenderPassDescriptor* pRenderPassDescriptor = pView->currentRenderPassDescriptor();
+    
+    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer(); // autoreleased ?
+    
     MTL::RenderCommandEncoder* pRenderCommandEncoder = pCommandBuffer->renderCommandEncoder( pRenderPassDescriptor );
     
     pRenderCommandEncoder->setRenderPipelineState( _pPSO );
-    pRenderCommandEncoder->setVertexBuffer( _pVertexPositionsBuffer, 0, 0 );
-    pRenderCommandEncoder->setVertexBuffer( _pVertexColorsBuffer, 0, 1 );
+    pRenderCommandEncoder->setVertexBuffer( _pArgBuffer, 0, 0 );
+    pRenderCommandEncoder->useResource( _pVertexPositionsBuffer, MTL::ResourceUsageRead );
+    pRenderCommandEncoder->useResource( _pVertexColorsBuffer, MTL::ResourceUsageRead );
     pRenderCommandEncoder->drawPrimitives( MTL::PrimitiveType::PrimitiveTypeTriangle, NS::UInteger(0), NS::UInteger(3) );
     
     pRenderCommandEncoder->endEncoding();

@@ -14,6 +14,7 @@
 		3B479D322BF5D6EE000C45FA /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D302BF5D6EE000C45FA /* Renderer.cpp */; };
 		3B479D352BF5D743000C45FA /* MTKViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D332BF5D743000C45FA /* MTKViewDelegate.cpp */; };
 		3B479D392BF6A7B3000C45FA /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D372BF6A7B3000C45FA /* AppDelegate.cpp */; };
+		3B479D412BF7F358000C45FA /* MetalDebugDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,7 +44,12 @@
 		3B479D362BF5D7F0000C45FA /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		3B479D372BF6A7B3000C45FA /* AppDelegate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AppDelegate.cpp; sourceTree = "<group>"; };
 		3B479D382BF6A7B3000C45FA /* AppDelegate.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AppDelegate.hpp; sourceTree = "<group>"; };
-		3B479D3A2BF7299F000C45FA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3B479D3B2BF744CE000C45FA /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		3B479D3C2BF744E6000C45FA /* DOCS.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = DOCS.md; sourceTree = "<group>"; };
+		3B479D3D2BF7C8F7000C45FA /* metal-cpp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "metal-cpp"; sourceTree = "<group>"; };
+		3B479D3E2BF7C8F7000C45FA /* metal-cpp-extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "metal-cpp-extensions"; sourceTree = "<group>"; };
+		3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalDebugDump.cpp; sourceTree = "<group>"; };
+		3B479D402BF7F358000C45FA /* MetalDebugDump.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetalDebugDump.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +69,10 @@
 		3B479D122BF5D370000C45FA = {
 			isa = PBXGroup;
 			children = (
+				3B479D3D2BF7C8F7000C45FA /* metal-cpp */,
+				3B479D3E2BF7C8F7000C45FA /* metal-cpp-extensions */,
+				3B479D3C2BF744E6000C45FA /* DOCS.md */,
+				3B479D3B2BF744CE000C45FA /* README.md */,
 				3B479D1D2BF5D370000C45FA /* MyMetalCPP */,
 				3B479D1C2BF5D370000C45FA /* Products */,
 				3B479D252BF5D520000C45FA /* Frameworks */,
@@ -88,7 +98,8 @@
 				3B479D362BF5D7F0000C45FA /* Common.h */,
 				3B479D372BF6A7B3000C45FA /* AppDelegate.cpp */,
 				3B479D382BF6A7B3000C45FA /* AppDelegate.hpp */,
-				3B479D3A2BF7299F000C45FA /* README.md */,
+				3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */,
+				3B479D402BF7F358000C45FA /* MetalDebugDump.hpp */,
 			);
 			path = MyMetalCPP;
 			sourceTree = "<group>";
@@ -164,6 +175,7 @@
 			files = (
 				3B479D392BF6A7B3000C45FA /* AppDelegate.cpp in Sources */,
 				3B479D352BF5D743000C45FA /* MTKViewDelegate.cpp in Sources */,
+				3B479D412BF7F358000C45FA /* MetalDebugDump.cpp in Sources */,
 				3B479D322BF5D6EE000C45FA /* Renderer.cpp in Sources */,
 				3B479D1F2BF5D370000C45FA /* main.cpp in Sources */,
 			);
