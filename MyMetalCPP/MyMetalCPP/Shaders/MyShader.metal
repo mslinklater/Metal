@@ -28,12 +28,15 @@ struct VertexData
 // Vertex
 v2f vertex vertexMain( device const VertexData* vertexData [[buffer(0)]],
                        device const InstanceData* instanceData [[buffer(1)]],
+                       device const CameraData& cameraData [[buffer(2)]],
                        uint vertexId [[vertex_id]],
                        uint instanceId [[instance_id]] )
 {
     v2f o;
     float4 pos = float4( vertexData[ vertexId ].position, 1.0 );
-    o.position = instanceData[ instanceId ].instanceTransform * pos;
+    pos = instanceData[ instanceId ].instanceTransform * pos;
+    pos = cameraData.perspectiveTransform * cameraData.worldTransform * pos;
+    o.position = pos;
     o.color = half3( instanceData[ instanceId ].instanceColor.rgb );
     return o;
 }

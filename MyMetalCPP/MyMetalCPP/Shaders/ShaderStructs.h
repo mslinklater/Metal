@@ -10,14 +10,21 @@
 
 #include <simd/simd.h>
 
-struct FrameData
-{
-    float angle;
-};
+//struct FrameData
+//{
+//   float angle;
+//};
 
-struct InstanceData
+struct InstanceData // size 80 bytes
 {
     simd::float4x4 instanceTransform;
     simd::float4 instanceColor;
 };
+
+struct CameraData
+{
+    simd::float4x4 perspectiveTransform;
+    simd::float4x4 worldTransform;
+};
+
 #endif /* ShaderStructs_h */

@@ -81,8 +81,10 @@ void AppDelegate::applicationDidFinishLaunching( NS::Notification* pNotification
 
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
-    _pMtkView->setClearColor( MTL::ClearColor::Make( 1.0, 0.0, 0.0, 1.0 ) );
-
+    _pMtkView->setClearColor( MTL::ClearColor::Make( 0.1, 0.1, 0.1, 1.0 ) );
+    _pMtkView->setDepthStencilPixelFormat(MTL::PixelFormat::PixelFormatDepth16Unorm);
+    _pMtkView->setClearDepth(1.0f);
+    
     _pViewDelegate = new MTKViewDelegate( _pDevice );
     _pMtkView->setDelegate( _pViewDelegate );
 

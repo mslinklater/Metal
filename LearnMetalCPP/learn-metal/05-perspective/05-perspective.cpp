@@ -470,7 +470,7 @@ void Renderer::buildDepthStencilStates()
 void Renderer::buildBuffers()
 {
     using simd::float3;
-    const float s = 0.5f;
+    const float s = 2.5f;
 
     float3 verts[] = {
         { -s, -s, +s },

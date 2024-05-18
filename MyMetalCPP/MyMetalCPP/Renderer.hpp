@@ -21,23 +21,19 @@ public:
     void draw( MTK::View* pView );
     
     void buildShaders();
+    void buildDepthStencilStates();
     void buildBuffers();
-//    void buildFrameData();
     
 private:
     MTL::Device* _pDevice;
     MTL::CommandQueue* _pCommandQueue;
     MTL::Library* _pShaderLibrary;
     MTL::RenderPipelineState* _pPSO;
-    
+    MTL::DepthStencilState* _pDepthStencilState;
     MTL::Buffer* _pVertexDataBuffer;
     MTL::Buffer* _pInstanceDataBuffer[kMaxFramesInFlight];
+    MTL::Buffer* _pCameraDataBuffer[kMaxFramesInFlight];
     MTL::Buffer* _pIndexBuffer;
-    
-//    MTL::Buffer* _pArgBuffer;
-//    MTL::Buffer* _pVertexPositionsBuffer;
-//    MTL::Buffer* _pVertexColorsBuffer;
-//    MTL::Buffer* _pFrameData[3];
     
     float _angle;
     int _frame;
