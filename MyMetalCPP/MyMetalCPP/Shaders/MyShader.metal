@@ -20,19 +20,21 @@ struct v2f
 // Argument buffer - pointers to two other buffers
 struct VertexData
 {
-   device float3* positions [[id(0)]];
-   device float3* colors [[id(1)]];
+    float3 position;
+//   device float3* positions [[id(0)]];
+//   device float3* colors [[id(1)]];
 };
 
-
 // Vertex
-v2f vertex vertexMain( device const VertexData* vertexData [[buffer(0)]], constant FrameData* frameData [[buffer(1)]], uint vertexId [[vertex_id]] )
+v2f vertex vertexMain( device const VertexData* vertexData [[buffer(0)]],
+                       device const InstanceData* instanceData [[buffer(1)]],
+                       uint vertexId [[vertex_id]],
+                       uint instanceId [[instance_id]] )
 {
-    float a = frameData->angle;
-    float3x3 rotationMatrix = float3x3( sin(a), cos(a), 0.0, cos(a), -sin(a), 0.0, 0.0, 0.0, 1.0 );
     v2f o;
-    o.position = float4( rotationMatrix * vertexData->positions[ vertexId ], 1.0 );
-    o.color = half3(vertexData->colors[ vertexId ]);
+    float4 pos = float4( vertexData[ vertexId ].position, 1.0 );
+    o.position = instanceData[ instanceId ].instanceTransform * pos;
+    o.color = half3( instanceData[ instanceId ].instanceColor.rgb );
     return o;
 }
 

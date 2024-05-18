@@ -9,7 +9,10 @@
 
 #include "Common.h"
 
-class Renderer 
+static constexpr size_t kNumInstances = 32;
+static constexpr size_t kMaxFramesInFlight = 3;
+
+class Renderer
 {
 public:
     Renderer( MTL::Device* pDevice );
@@ -19,7 +22,7 @@ public:
     
     void buildShaders();
     void buildBuffers();
-    void buildFrameData();
+//    void buildFrameData();
     
 private:
     MTL::Device* _pDevice;
@@ -27,12 +30,15 @@ private:
     MTL::Library* _pShaderLibrary;
     MTL::RenderPipelineState* _pPSO;
     
-    MTL::Buffer* _pArgBuffer;
-    MTL::Buffer* _pVertexPositionsBuffer;
-    MTL::Buffer* _pVertexColorsBuffer;
+    MTL::Buffer* _pVertexDataBuffer;
+    MTL::Buffer* _pInstanceDataBuffer[kMaxFramesInFlight];
+    MTL::Buffer* _pIndexBuffer;
     
-    // Per-frame data
-    MTL::Buffer* _pFrameData[3];
+//    MTL::Buffer* _pArgBuffer;
+//    MTL::Buffer* _pVertexPositionsBuffer;
+//    MTL::Buffer* _pVertexColorsBuffer;
+//    MTL::Buffer* _pFrameData[3];
+    
     float _angle;
     int _frame;
     dispatch_semaphore_t _semaphore;

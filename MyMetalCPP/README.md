@@ -20,3 +20,4 @@ The arg buffer stores two references to the two buffers from 01
 
 ### 03 - Animation
 
+Added semaphor, per-frame data buffer
