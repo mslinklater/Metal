@@ -19,13 +19,22 @@ public:
     
     void buildShaders();
     void buildBuffers();
+    void buildFrameData();
     
 private:
     MTL::Device* _pDevice;
     MTL::CommandQueue* _pCommandQueue;
     MTL::Library* _pShaderLibrary;
     MTL::RenderPipelineState* _pPSO;
+    
     MTL::Buffer* _pArgBuffer;
     MTL::Buffer* _pVertexPositionsBuffer;
     MTL::Buffer* _pVertexColorsBuffer;
+    
+    // Per-frame data
+    MTL::Buffer* _pFrameData[3];
+    float _angle;
+    int _frame;
+    dispatch_semaphore_t _semaphore;
+    static const int kMaxFramesInFlight;
 };
