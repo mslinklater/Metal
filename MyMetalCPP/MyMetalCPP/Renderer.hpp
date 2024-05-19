@@ -9,7 +9,10 @@
 
 #include "Common.h"
 
-static constexpr size_t kNumInstances = 32;
+static constexpr size_t kInstanceRows = 10;
+static constexpr size_t kInstanceColumns = 10;
+static constexpr size_t kInstanceDepth = 10;
+static constexpr size_t kNumInstances = (kInstanceRows * kInstanceColumns * kInstanceDepth);
 static constexpr size_t kMaxFramesInFlight = 3;
 
 class Renderer
