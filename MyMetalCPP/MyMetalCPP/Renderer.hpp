@@ -26,6 +26,7 @@ public:
     void buildShaders();
     void buildDepthStencilStates();
     void buildBuffers();
+    void buildTextures();
     
 private:
     MTL::Device* _pDevice;
@@ -33,6 +34,7 @@ private:
     MTL::Library* _pShaderLibrary;
     MTL::RenderPipelineState* _pPSO;
     MTL::DepthStencilState* _pDepthStencilState;
+    MTL::Texture* _pTexture;
     MTL::Buffer* _pVertexDataBuffer;
     MTL::Buffer* _pInstanceDataBuffer[kMaxFramesInFlight];
     MTL::Buffer* _pCameraDataBuffer[kMaxFramesInFlight];

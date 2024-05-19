@@ -19,6 +19,7 @@ struct VertexData
 {
     simd::float3 position;
     simd::float3 normal;
+    simd::float2 texcoord;
 };
 
 struct InstanceData // size 80 bytes

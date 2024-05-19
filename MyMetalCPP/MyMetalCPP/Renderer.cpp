@@ -22,6 +22,7 @@ Renderer::Renderer( MTL::Device* pDevice )
     _pCommandQueue = _pDevice->newCommandQueue();   // already retained as 'new'
     buildShaders();
     buildDepthStencilStates();
+    buildTextures();
     buildBuffers();
     
     _semaphore = dispatch_semaphore_create( Renderer::kMaxFramesInFlight );
@@ -29,6 +30,7 @@ Renderer::Renderer( MTL::Device* pDevice )
 
 Renderer::~Renderer()
 {
+    _pTexture->release();
     _pShaderLibrary->release();
     _pDepthStencilState->release();
     _pVertexDataBuffer->release();
@@ -95,40 +97,42 @@ void Renderer::buildDepthStencilStates()
 void Renderer::buildBuffers()
 {
     using simd::float3;
+    using simd::float2;
 
     const float s = 0.5f;
 
     VertexData verts[] = {
-        //   Positions          Normals
-        { { -s, -s, +s }, { 0.f,  0.f,  1.f } },
-        { { +s, -s, +s }, { 0.f,  0.f,  1.f } },
-        { { +s, +s, +s }, { 0.f,  0.f,  1.f } },
-        { { -s, +s, +s }, { 0.f,  0.f,  1.f } },
+        //                                         Texture
+        //   Positions           Normals         Coordinates
+        { { -s, -s, +s }, {  0.f,  0.f,  1.f }, { 0.f, 1.f } },
+        { { +s, -s, +s }, {  0.f,  0.f,  1.f }, { 1.f, 1.f } },
+        { { +s, +s, +s }, {  0.f,  0.f,  1.f }, { 1.f, 0.f } },
+        { { -s, +s, +s }, {  0.f,  0.f,  1.f }, { 0.f, 0.f } },
 
-        { { +s, -s, +s }, { 1.f,  0.f,  0.f } },
-        { { +s, -s, -s }, { 1.f,  0.f,  0.f } },
-        { { +s, +s, -s }, { 1.f,  0.f,  0.f } },
-        { { +s, +s, +s }, { 1.f,  0.f,  0.f } },
+        { { +s, -s, +s }, {  1.f,  0.f,  0.f }, { 0.f, 1.f } },
+        { { +s, -s, -s }, {  1.f,  0.f,  0.f }, { 1.f, 1.f } },
+        { { +s, +s, -s }, {  1.f,  0.f,  0.f }, { 1.f, 0.f } },
+        { { +s, +s, +s }, {  1.f,  0.f,  0.f }, { 0.f, 0.f } },
 
-        { { +s, -s, -s }, { 0.f,  0.f, -1.f } },
-        { { -s, -s, -s }, { 0.f,  0.f, -1.f } },
-        { { -s, +s, -s }, { 0.f,  0.f, -1.f } },
-        { { +s, +s, -s }, { 0.f,  0.f, -1.f } },
+        { { +s, -s, -s }, {  0.f,  0.f, -1.f }, { 0.f, 1.f } },
+        { { -s, -s, -s }, {  0.f,  0.f, -1.f }, { 1.f, 1.f } },
+        { { -s, +s, -s }, {  0.f,  0.f, -1.f }, { 1.f, 0.f } },
+        { { +s, +s, -s }, {  0.f,  0.f, -1.f }, { 0.f, 0.f } },
 
-        { { -s, -s, -s }, { -1.f, 0.f,  0.f } },
-        { { -s, -s, +s }, { -1.f, 0.f,  0.f } },
-        { { -s, +s, +s }, { -1.f, 0.f,  0.f } },
-        { { -s, +s, -s }, { -1.f, 0.f,  0.f } },
+        { { -s, -s, -s }, { -1.f,  0.f,  0.f }, { 0.f, 1.f } },
+        { { -s, -s, +s }, { -1.f,  0.f,  0.f }, { 1.f, 1.f } },
+        { { -s, +s, +s }, { -1.f,  0.f,  0.f }, { 1.f, 0.f } },
+        { { -s, +s, -s }, { -1.f,  0.f,  0.f }, { 0.f, 0.f } },
 
-        { { -s, +s, +s }, { 0.f,  1.f,  0.f } },
-        { { +s, +s, +s }, { 0.f,  1.f,  0.f } },
-        { { +s, +s, -s }, { 0.f,  1.f,  0.f } },
-        { { -s, +s, -s }, { 0.f,  1.f,  0.f } },
+        { { -s, +s, +s }, {  0.f,  1.f,  0.f }, { 0.f, 1.f } },
+        { { +s, +s, +s }, {  0.f,  1.f,  0.f }, { 1.f, 1.f } },
+        { { +s, +s, -s }, {  0.f,  1.f,  0.f }, { 1.f, 0.f } },
+        { { -s, +s, -s }, {  0.f,  1.f,  0.f }, { 0.f, 0.f } },
 
-        { { -s, -s, -s }, { 0.f, -1.f,  0.f } },
-        { { +s, -s, -s }, { 0.f, -1.f,  0.f } },
-        { { +s, -s, +s }, { 0.f, -1.f,  0.f } },
-        { { -s, -s, +s }, { 0.f, -1.f,  0.f } },
+        { { -s, -s, -s }, {  0.f, -1.f,  0.f }, { 0.f, 1.f } },
+        { { +s, -s, -s }, {  0.f, -1.f,  0.f }, { 1.f, 1.f } },
+        { { +s, -s, +s }, {  0.f, -1.f,  0.f }, { 1.f, 0.f } },
+        { { -s, -s, +s }, {  0.f, -1.f,  0.f }, { 0.f, 0.f } }
     };
 
     uint16_t indices[] = {
@@ -169,6 +173,44 @@ void Renderer::buildBuffers()
     }
 }
 
+void Renderer::buildTextures()
+{
+    const uint32_t tw = 128;
+    const uint32_t th = 128;
+
+    MTL::TextureDescriptor* pTextureDesc = MTL::TextureDescriptor::alloc()->init();
+    pTextureDesc->setWidth( tw );
+    pTextureDesc->setHeight( th );
+    pTextureDesc->setPixelFormat( MTL::PixelFormatRGBA8Unorm );
+    pTextureDesc->setTextureType( MTL::TextureType2D );
+    pTextureDesc->setStorageMode( MTL::StorageModeManaged );
+    pTextureDesc->setUsage( MTL::ResourceUsageSample | MTL::ResourceUsageRead );
+
+    MTL::Texture *pTexture = _pDevice->newTexture( pTextureDesc );
+    _pTexture = pTexture;
+
+    uint8_t* pTextureData = (uint8_t *)alloca( tw * th * 4 );
+    for ( size_t y = 0; y < th; ++y )
+    {
+        for ( size_t x = 0; x < tw; ++x )
+        {
+            bool isWhite = (x^y) & 0b1000000;
+            uint8_t c = isWhite ? 0xFF : 0xA;
+
+            size_t i = y * tw + x;
+
+            pTextureData[ i * 4 + 0 ] = c;
+            pTextureData[ i * 4 + 1 ] = c;
+            pTextureData[ i * 4 + 2 ] = c;
+            pTextureData[ i * 4 + 3 ] = 0xFF;
+        }
+    }
+
+    _pTexture->replaceRegion( MTL::Region( 0, 0, 0, tw, th, 1 ), 0, pTextureData, tw * 4 );
+
+    pTextureDesc->release();
+}
+
 void Renderer::draw( MTK::View* pView )
 {
     using simd::float3;
@@ -189,7 +231,7 @@ void Renderer::draw( MTK::View* pView )
 
     _angle += 0.002f;
 
-    const float scl = 0.1f;
+    const float scl = 0.2f;
     InstanceData* pInstanceData = reinterpret_cast< InstanceData *>( pInstanceDataBuffer->contents() );
     
     float3 objectPosition = { 0.f, 0.f, -10.f };
@@ -259,6 +301,8 @@ void Renderer::draw( MTK::View* pView )
     pEnc->setVertexBuffer( pInstanceDataBuffer, /* offset */ 0, /* index */ 1 );
     pEnc->setVertexBuffer( pCameraDataBuffer, /* offset */ 0, /* index */ 2 );
 
+    pEnc->setFragmentTexture(_pTexture, 0);
+    
     pEnc->setCullMode( MTL::CullModeBack );
     pEnc->setFrontFacingWinding( MTL::Winding::WindingCounterClockwise );
 

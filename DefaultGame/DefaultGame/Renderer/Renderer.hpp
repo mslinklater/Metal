@@ -24,13 +24,6 @@ private:
     MTL::DepthStencilState* depthState;
     MTL::Texture* colorMap;
     MTL::VertexDescriptor* vertexDescriptor;
-    
-    // MTKMesh
 };
-
-//- (void)drawInMTKView:(nonnull MTKView *)view {
-//- (void)mtkView:(nonnull MTKView *)view drawableSizeWillChange:(CGSize)size {
-//- (void)encodeWithCoder:(nonnull NSCoder *)coder {
-
 
 #endif /* Renderer_hpp */
