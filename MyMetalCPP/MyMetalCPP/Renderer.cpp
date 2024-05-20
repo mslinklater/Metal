@@ -16,6 +16,7 @@ Renderer::Renderer( MTL::Device* pDevice )
 : _pDevice( pDevice->retain() )
 , _angle ( 0.f )
 , _frame( 0 )
+, _animationIndex( 0 )
 {
     MetalDebugDump(pDevice);
     
@@ -25,13 +26,14 @@ Renderer::Renderer( MTL::Device* pDevice )
     buildDepthStencilStates();
     buildTextures();
     buildBuffers();
-    generateMandelbrotTexture();
+//    generateMandelbrotTexture();
     
     _semaphore = dispatch_semaphore_create( Renderer::kMaxFramesInFlight );
 }
 
 Renderer::~Renderer()
 {
+    _pTextureAnimationBuffer->release();
     _pTexture->release();
     _pShaderLibrary->release();
     _pDepthStencilState->release();
@@ -101,15 +103,20 @@ void Renderer::buildComputePipeline()
     pMandelbrotFn->release();
 }
 
-void Renderer::generateMandelbrotTexture()
+void Renderer::generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer )
 {
-    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
+//    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
     assert(pCommandBuffer);
 
+    uint* ptr = reinterpret_cast<uint*>(_pTextureAnimationBuffer->contents());
+    *ptr = (_animationIndex++) % 5000;
+    _pTextureAnimationBuffer->didModifyRange(NS::Range::Make(0, sizeof(uint)));
+    
     MTL::ComputeCommandEncoder* pComputeEncoder = pCommandBuffer->computeCommandEncoder();
 
     pComputeEncoder->setComputePipelineState( _pComputePSO );
     pComputeEncoder->setTexture( _pTexture, 0 );
+    pComputeEncoder->setBuffer(_pTextureAnimationBuffer, 0, 0);
 
     MTL::Size gridSize = MTL::Size( kTextureWidth, kTextureHeight, 1 );
 
@@ -120,7 +127,7 @@ void Renderer::generateMandelbrotTexture()
 
     pComputeEncoder->endEncoding();
 
-    pCommandBuffer->commit();
+//    pCommandBuffer->commit();
 }
 
 void Renderer::buildDepthStencilStates()
@@ -199,7 +206,6 @@ void Renderer::buildBuffers()
     _pVertexDataBuffer->didModifyRange( NS::Range::Make( 0, _pVertexDataBuffer->length() ) );
     _pIndexBuffer->didModifyRange( NS::Range::Make( 0, _pIndexBuffer->length() ) );
 
-//    const size_t instanceDataSize = kMaxFramesInFlight * kNumInstances * sizeof( InstanceData );
     const size_t instanceDataSize = kNumInstances * sizeof( InstanceData );
     for ( size_t i = 0; i < kMaxFramesInFlight; ++i )
     {
@@ -211,6 +217,7 @@ void Renderer::buildBuffers()
     {
         _pCameraDataBuffer[ i ] = _pDevice->newBuffer( cameraDataSize, MTL::ResourceStorageModeManaged );
     }
+    _pTextureAnimationBuffer = _pDevice->newBuffer( sizeof(uint), MTL::ResourceStorageModeManaged);
 }
 
 void Renderer::buildTextures()
@@ -308,6 +315,8 @@ void Renderer::draw( MTK::View* pView )
     pCameraData->worldNormalTransform = math::discardTranslation( pCameraData->worldTransform );
     pCameraDataBuffer->didModifyRange( NS::Range::Make( 0, sizeof( CameraData ) ) );
 
+    generateMandelbrotTexture( pCmd );
+    
     MTL::RenderPassDescriptor* pRpd = pView->currentRenderPassDescriptor();
     MTL::RenderCommandEncoder* pEnc = pCmd->renderCommandEncoder( pRpd );
 

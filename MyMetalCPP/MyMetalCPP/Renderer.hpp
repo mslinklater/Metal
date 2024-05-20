@@ -30,7 +30,7 @@ public:
     void buildBuffers();
     void buildTextures();
     void buildComputePipeline();
-    void generateMandelbrotTexture();
+    void generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer );
     
 private:
     MTL::Device* _pDevice;
@@ -44,9 +44,12 @@ private:
     MTL::Buffer* _pInstanceDataBuffer[kMaxFramesInFlight];
     MTL::Buffer* _pCameraDataBuffer[kMaxFramesInFlight];
     MTL::Buffer* _pIndexBuffer;
+    MTL::Buffer* _pTextureAnimationBuffer;
     
     float _angle;
     int _frame;
     dispatch_semaphore_t _semaphore;
     static const int kMaxFramesInFlight;
+    
+    uint _animationIndex;
 };

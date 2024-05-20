@@ -5,8 +5,13 @@
 * Move the shaders out in to their own .metal files - DONE
 * Get rid of the temporary pointers - why are they there ? Seems a waste of space.
 * Abstract away a mesh object
+* Integrate DearImGui
+* Add the physics in a weekend stuff
+* Look at Ray Tracing
 
 ## Notes
+
+* Idea - Compute procgen
 
 ### 00
 

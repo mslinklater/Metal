@@ -10,11 +10,26 @@ using namespace metal;
 
 kernel void mandelbrot_set(texture2d< half, access::write > tex [[texture(0)]],
                             uint2 index [[thread_position_in_grid]],
-                            uint2 gridSize [[threads_per_grid]])
+                            uint2 gridSize [[threads_per_grid]],
+                            device const uint* frame [[buffer(0)]])
 {
-     // Scale
-     float x0 = 2.0 * index.x / gridSize.x - 1.5;
-     float y0 = 2.0 * index.y / gridSize.y - 1.0;
+     constexpr float kAnimationFrequency = 0.01;
+     constexpr float kAnimationSpeed = 4;
+     constexpr float kAnimationScaleLow = 0.62;
+     constexpr float kAnimationScale = 0.38;
+
+     constexpr float2 kMandelbrotPixelOffset = {-0.2, -0.35};
+    constexpr float2 kMandelbrotOrigin = {-1.2, -0.32};
+     constexpr float2 kMandelbrotScale = {2.2, 2.0};
+
+     // Map time to zoom value in [kAnimationScaleLow, 1]
+     float zoom = kAnimationScaleLow + kAnimationScale * cos(kAnimationFrequency * *frame);
+     // Speed up zooming
+     zoom = pow(zoom, kAnimationSpeed);
+
+     //Scale
+     float x0 = zoom * kMandelbrotScale.x * ((float)index.x / gridSize.x + kMandelbrotPixelOffset.x) + kMandelbrotOrigin.x;
+     float y0 = zoom * kMandelbrotScale.y * ((float)index.y / gridSize.y + kMandelbrotPixelOffset.y) + kMandelbrotOrigin.y;
 
      // Implement Mandelbrot set
      float x = 0.0;
