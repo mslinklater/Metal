@@ -21,9 +21,11 @@ Renderer::Renderer( MTL::Device* pDevice )
     
     _pCommandQueue = _pDevice->newCommandQueue();   // already retained as 'new'
     buildShaders();
+    buildComputePipeline();
     buildDepthStencilStates();
     buildTextures();
     buildBuffers();
+    generateMandelbrotTexture();
     
     _semaphore = dispatch_semaphore_create( Renderer::kMaxFramesInFlight );
 }
@@ -44,6 +46,7 @@ Renderer::~Renderer()
     }
     _pIndexBuffer->release();
     _pPSO->release();
+    _pComputePSO->release();
     _pCommandQueue->release();
     _pDevice->release();
 }
@@ -81,6 +84,43 @@ void Renderer::buildShaders()
     pFragFn->release();
     pDesc->release();
    _pShaderLibrary = pLibrary;
+}
+
+void Renderer::buildComputePipeline()
+{
+    NS::Error* pError = nullptr;
+    
+    MTL::Function* pMandelbrotFn = _pShaderLibrary->newFunction( NS::String::string("mandelbrot_set", NS::UTF8StringEncoding) );
+    _pComputePSO = _pDevice->newComputePipelineState( pMandelbrotFn, &pError );
+    if ( !_pComputePSO )
+    {
+        __builtin_printf( "%s", pError->localizedDescription()->utf8String() );
+        assert(false);
+    }
+
+    pMandelbrotFn->release();
+}
+
+void Renderer::generateMandelbrotTexture()
+{
+    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
+    assert(pCommandBuffer);
+
+    MTL::ComputeCommandEncoder* pComputeEncoder = pCommandBuffer->computeCommandEncoder();
+
+    pComputeEncoder->setComputePipelineState( _pComputePSO );
+    pComputeEncoder->setTexture( _pTexture, 0 );
+
+    MTL::Size gridSize = MTL::Size( kTextureWidth, kTextureHeight, 1 );
+
+    NS::UInteger threadGroupSize = _pComputePSO->maxTotalThreadsPerThreadgroup();
+    MTL::Size threadgroupSize( threadGroupSize, 1, 1 );
+
+    pComputeEncoder->dispatchThreads( gridSize, threadgroupSize );
+
+    pComputeEncoder->endEncoding();
+
+    pCommandBuffer->commit();
 }
 
 void Renderer::buildDepthStencilStates()
@@ -175,39 +215,16 @@ void Renderer::buildBuffers()
 
 void Renderer::buildTextures()
 {
-    const uint32_t tw = 128;
-    const uint32_t th = 128;
-
     MTL::TextureDescriptor* pTextureDesc = MTL::TextureDescriptor::alloc()->init();
-    pTextureDesc->setWidth( tw );
-    pTextureDesc->setHeight( th );
+    pTextureDesc->setWidth( kTextureWidth );
+    pTextureDesc->setHeight( kTextureHeight );
     pTextureDesc->setPixelFormat( MTL::PixelFormatRGBA8Unorm );
     pTextureDesc->setTextureType( MTL::TextureType2D );
     pTextureDesc->setStorageMode( MTL::StorageModeManaged );
-    pTextureDesc->setUsage( MTL::ResourceUsageSample | MTL::ResourceUsageRead );
+    pTextureDesc->setUsage( MTL::ResourceUsageSample | MTL::ResourceUsageRead | MTL::ResourceUsageWrite );
 
     MTL::Texture *pTexture = _pDevice->newTexture( pTextureDesc );
     _pTexture = pTexture;
-
-    uint8_t* pTextureData = (uint8_t *)alloca( tw * th * 4 );
-    for ( size_t y = 0; y < th; ++y )
-    {
-        for ( size_t x = 0; x < tw; ++x )
-        {
-            bool isWhite = (x^y) & 0b1000000;
-            uint8_t c = isWhite ? 0xFF : 0xA;
-
-            size_t i = y * tw + x;
-
-            pTextureData[ i * 4 + 0 ] = c;
-            pTextureData[ i * 4 + 1 ] = c;
-            pTextureData[ i * 4 + 2 ] = c;
-            pTextureData[ i * 4 + 3 ] = 0xFF;
-        }
-    }
-
-    _pTexture->replaceRegion( MTL::Region( 0, 0, 0, tw, th, 1 ), 0, pTextureData, tw * 4 );
-
     pTextureDesc->release();
 }
 

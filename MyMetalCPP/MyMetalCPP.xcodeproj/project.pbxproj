@@ -17,6 +17,7 @@
 		3B479D412BF7F358000C45FA /* MetalDebugDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */; };
 		3B479D442BF7FB12000C45FA /* MyShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D432BF7FB12000C45FA /* MyShader.metal */; };
 		3B479D482BF95F09000C45FA /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D462BF95F09000C45FA /* Math.cpp */; };
+		3B479D4A2BFAA379000C45FA /* Mandelbrot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D492BFAA379000C45FA /* Mandelbrot.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -56,6 +57,7 @@
 		3B479D452BF88C9C000C45FA /* ShaderStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderStructs.h; sourceTree = "<group>"; };
 		3B479D462BF95F09000C45FA /* Math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Math.cpp; sourceTree = "<group>"; };
 		3B479D472BF95F09000C45FA /* Math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Math.hpp; sourceTree = "<group>"; };
+		3B479D492BFAA379000C45FA /* Mandelbrot.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Mandelbrot.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 			children = (
 				3B479D432BF7FB12000C45FA /* MyShader.metal */,
 				3B479D452BF88C9C000C45FA /* ShaderStructs.h */,
+				3B479D492BFAA379000C45FA /* Mandelbrot.metal */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B479D442BF7FB12000C45FA /* MyShader.metal in Sources */,
+				3B479D4A2BFAA379000C45FA /* Mandelbrot.metal in Sources */,
 				3B479D482BF95F09000C45FA /* Math.cpp in Sources */,
 				3B479D392BF6A7B3000C45FA /* AppDelegate.cpp in Sources */,
 				3B479D352BF5D743000C45FA /* MTKViewDelegate.cpp in Sources */,

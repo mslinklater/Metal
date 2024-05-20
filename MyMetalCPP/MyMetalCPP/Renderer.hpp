@@ -14,6 +14,8 @@ static constexpr size_t kInstanceColumns = 10;
 static constexpr size_t kInstanceDepth = 10;
 static constexpr size_t kNumInstances = (kInstanceRows * kInstanceColumns * kInstanceDepth);
 static constexpr size_t kMaxFramesInFlight = 3;
+static constexpr uint32_t kTextureWidth = 128;
+static constexpr uint32_t kTextureHeight = 128;
 
 class Renderer
 {
@@ -27,12 +29,15 @@ public:
     void buildDepthStencilStates();
     void buildBuffers();
     void buildTextures();
+    void buildComputePipeline();
+    void generateMandelbrotTexture();
     
 private:
     MTL::Device* _pDevice;
     MTL::CommandQueue* _pCommandQueue;
     MTL::Library* _pShaderLibrary;
     MTL::RenderPipelineState* _pPSO;
+    MTL::ComputePipelineState* _pComputePSO;
     MTL::DepthStencilState* _pDepthStencilState;
     MTL::Texture* _pTexture;
     MTL::Buffer* _pVertexDataBuffer;
