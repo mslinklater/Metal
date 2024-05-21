@@ -8,6 +8,13 @@
 #include "AppDelegate.hpp"
 
 #include "MTKViewDelegate.hpp"
+#include "Common.h"
+
+#if ENABLE_IMGUI
+#include "imgui.h"
+#include "imgui_impl_metal.h"
+#include "imgui_impl_osx.h"
+#endif
 
 AppDelegate::~AppDelegate()
 {
@@ -69,15 +76,32 @@ void AppDelegate::applicationWillFinishLaunching( NS::Notification* pNotificatio
 
 void AppDelegate::applicationDidFinishLaunching( NS::Notification* pNotification )
 {
+#if ENABLE_IMGUI
+    IMGUI_CHECKVERSION();
+#endif
+    
     CGRect frame = (CGRect){ {100.0, 100.0}, {1024.0, 1024.0} };
 
     _pWindow = NS::Window::alloc()->init(
         frame,
-        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled,
+        NS::WindowStyleMaskClosable|NS::WindowStyleMaskTitled|NS::WindowStyleMaskResizable,
         NS::BackingStoreBuffered,
         false );
 
     _pDevice = MTL::CreateSystemDefaultDevice();
+
+#if ENABLE_IMGUI
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+
+    // Setup Renderer backend
+    ImGui_ImplMetal_Init(_pDevice);
+#endif
 
     _pMtkView = MTK::View::alloc()->init( frame, _pDevice );
     _pMtkView->setColorPixelFormat( MTL::PixelFormat::PixelFormatBGRA8Unorm_sRGB );
@@ -87,6 +111,10 @@ void AppDelegate::applicationDidFinishLaunching( NS::Notification* pNotification
     
     _pViewDelegate = new MTKViewDelegate( _pDevice );
     _pMtkView->setDelegate( _pViewDelegate );
+
+#if ENABLE_IMGUI
+    ImGui_ImplOSX_Init(_pMtkView);
+#endif
 
     _pWindow->setContentView( _pMtkView );
     _pWindow->setTitle( NS::String::string( "MyMetalCPP", NS::StringEncoding::UTF8StringEncoding ) );

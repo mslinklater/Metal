@@ -23,15 +23,18 @@ public:
     Renderer( MTL::Device* pDevice );
     virtual ~Renderer();
     
+    void update();
     void draw( MTK::View* pView );
-    
+    void resize( MTK::View* pView, CGSize size );
+
     void buildShaders();
     void buildDepthStencilStates();
     void buildBuffers();
     void buildTextures();
     void buildComputePipeline();
-    void generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer );
-    
+    void generateMandelbrotTexture();
+//    void generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer );
+
 private:
     MTL::Device* _pDevice;
     MTL::CommandQueue* _pCommandQueue;

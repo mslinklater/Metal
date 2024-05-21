@@ -18,6 +18,7 @@ public:
     virtual ~MTKViewDelegate() override;
     
     virtual void drawInMTKView( MTK::View* pView ) override;
+    virtual void drawableSizeWillChange( MTK::View* pView, CGSize size ) override;
 
 private:
     Renderer* _pRenderer;

@@ -12,3 +12,6 @@
 #include <MetalKit/MetalKit.hpp>
 
 #include <iostream>
+
+#define ENABLE_RENDERING 1
+#define ENABLE_IMGUI 1

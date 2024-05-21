@@ -22,5 +22,16 @@ MTKViewDelegate::~MTKViewDelegate()
 
 void MTKViewDelegate::drawInMTKView( MTK::View* pView )
 {
+#if ENABLE_RENDERING
+    _pRenderer->update();
     _pRenderer->draw( pView );
+#endif
+}
+
+void MTKViewDelegate::drawableSizeWillChange( MTK::View* pView, CGSize size )
+{
+    if(_pRenderer)
+    {
+        _pRenderer->resize(pView, size);
+    }
 }

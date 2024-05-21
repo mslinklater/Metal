@@ -9,6 +9,13 @@
 #include "MetalDebugDump.hpp"
 #include "Shaders/ShaderStructs.h"
 #include "Math.hpp"
+#include "Common.h"
+
+#if ENABLE_IMGUI
+#include "imgui.h"
+#include "imgui_impl_metal.h"
+#include "imgui_impl_osx.h"
+#endif
 
 const int Renderer::kMaxFramesInFlight = 3;
 
@@ -18,15 +25,12 @@ Renderer::Renderer( MTL::Device* pDevice )
 , _frame( 0 )
 , _animationIndex( 0 )
 {
-    MetalDebugDump(pDevice);
-    
     _pCommandQueue = _pDevice->newCommandQueue();   // already retained as 'new'
     buildShaders();
     buildComputePipeline();
     buildDepthStencilStates();
     buildTextures();
     buildBuffers();
-//    generateMandelbrotTexture();
     
     _semaphore = dispatch_semaphore_create( Renderer::kMaxFramesInFlight );
 }
@@ -103,9 +107,10 @@ void Renderer::buildComputePipeline()
     pMandelbrotFn->release();
 }
 
-void Renderer::generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer )
+//void Renderer::generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer )
+void Renderer::generateMandelbrotTexture()
 {
-//    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
+    MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
     assert(pCommandBuffer);
 
     uint* ptr = reinterpret_cast<uint*>(_pTextureAnimationBuffer->contents());
@@ -127,7 +132,7 @@ void Renderer::generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer )
 
     pComputeEncoder->endEncoding();
 
-//    pCommandBuffer->commit();
+    pCommandBuffer->commit();
 }
 
 void Renderer::buildDepthStencilStates()
@@ -235,26 +240,20 @@ void Renderer::buildTextures()
     pTextureDesc->release();
 }
 
-void Renderer::draw( MTK::View* pView )
+void Renderer::update()
 {
     using simd::float3;
     using simd::float4;
     using simd::float4x4;
-
-    NS::AutoreleasePool* pPool = NS::AutoreleasePool::alloc()->init();
-
+    
+    // Just update stuff
+    
     _frame = (_frame + 1) % Renderer::kMaxFramesInFlight;
+    _angle += 0.002f;
+    
     MTL::Buffer* pInstanceDataBuffer = _pInstanceDataBuffer[ _frame ];
 
-    MTL::CommandBuffer* pCmd = _pCommandQueue->commandBuffer();
-    dispatch_semaphore_wait( _semaphore, DISPATCH_TIME_FOREVER );
-    Renderer* pRenderer = this;
-    pCmd->addCompletedHandler( ^void( MTL::CommandBuffer* pCmd ){
-        dispatch_semaphore_signal( pRenderer->_semaphore );
-    });
-
-    _angle += 0.002f;
-
+    // update instanced data
     const float scl = 0.2f;
     InstanceData* pInstanceData = reinterpret_cast< InstanceData *>( pInstanceDataBuffer->contents() );
     
@@ -307,6 +306,29 @@ void Renderer::draw( MTK::View* pView )
     }
     NS::UInteger length = pInstanceDataBuffer->length();
     pInstanceDataBuffer->didModifyRange( NS::Range::Make( 0, length ) );
+}
+
+void Renderer::resize( MTK::View* pView, CGSize size )
+{
+    std::cout << "Window resize: " << size.width << "x" << size.height << std::endl;
+}
+
+void Renderer::draw( MTK::View* pView )
+{
+    using simd::float3;
+    using simd::float4;
+    using simd::float4x4;
+
+    NS::AutoreleasePool* pPool = NS::AutoreleasePool::alloc()->init();
+
+    MTL::Buffer* pInstanceDataBuffer = _pInstanceDataBuffer[ _frame ];
+
+    MTL::CommandBuffer* pCmd = _pCommandQueue->commandBuffer();
+    dispatch_semaphore_wait( _semaphore, DISPATCH_TIME_FOREVER );
+    Renderer* pRenderer = this;
+    pCmd->addCompletedHandler( ^void( MTL::CommandBuffer* pCmd ){
+        dispatch_semaphore_signal( pRenderer->_semaphore );
+    });
 
     MTL::Buffer* pCameraDataBuffer = _pCameraDataBuffer[ _frame ];
     CameraData* pCameraData = reinterpret_cast< CameraData *>( pCameraDataBuffer->contents() );
@@ -315,8 +337,8 @@ void Renderer::draw( MTK::View* pView )
     pCameraData->worldNormalTransform = math::discardTranslation( pCameraData->worldTransform );
     pCameraDataBuffer->didModifyRange( NS::Range::Make( 0, sizeof( CameraData ) ) );
 
-    generateMandelbrotTexture( pCmd );
-    
+    generateMandelbrotTexture();
+
     MTL::RenderPassDescriptor* pRpd = pView->currentRenderPassDescriptor();
     MTL::RenderCommandEncoder* pEnc = pCmd->renderCommandEncoder( pRpd );
 
@@ -337,6 +359,23 @@ void Renderer::draw( MTK::View* pView )
                                 _pIndexBuffer,
                                 0,
                                 kNumInstances );
+
+#if ENABLE_IMGUI
+    ImGui_ImplMetal_NewFrame(pRpd);
+    ImGui_ImplOSX_NewFrame(pView);
+    ImGui::NewFrame();
+
+    static bool show_demo_window = true;
+
+    // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+    if (show_demo_window)
+        ImGui::ShowDemoWindow(&show_demo_window);
+
+    ImGui::Render();
+    ImDrawData* draw_data = ImGui::GetDrawData();
+
+    ImGui_ImplMetal_RenderDrawData(draw_data, pCmd, pEnc);
+#endif
 
     pEnc->endEncoding();
     pCmd->presentDrawable( pView->currentDrawable() );
