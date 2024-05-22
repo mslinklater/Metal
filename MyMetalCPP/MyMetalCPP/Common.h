@@ -14,4 +14,6 @@
 #include <iostream>
 
 #define ENABLE_RENDERING 1
-#define ENABLE_IMGUI 1
+//#define ENABLE_IMGUI 1
+
+#define AAPLSTR( str ) reinterpret_cast< const NS::String* >(__builtin___CFStringMakeConstantString( str ))

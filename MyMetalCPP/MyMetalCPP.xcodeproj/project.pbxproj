@@ -28,6 +28,7 @@
 		3BC863212BFBF10A00AB558C /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3BC863182BFBF10A00AB558C /* main.mm */; };
 		3BC863252BFBF21500AB558C /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B479D2E2BF5D58C000C45FA /* AppKit.framework */; };
 		3BC863272BFBF21B00AB558C /* GameController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BC863262BFBF21B00AB558C /* GameController.framework */; };
+		3BC8632E2BFE8B7600AB558C /* ui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BC8632C2BFE8B7600AB558C /* ui.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -85,6 +86,8 @@
 		3BC863232BFBF15F00AB558C /* imstb_rectpack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_rectpack.h; sourceTree = "<group>"; };
 		3BC863242BFBF17E00AB558C /* imstb_truetype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imstb_truetype.h; sourceTree = "<group>"; };
 		3BC863262BFBF21B00AB558C /* GameController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameController.framework; path = System/Library/Frameworks/GameController.framework; sourceTree = SDKROOT; };
+		3BC8632C2BFE8B7600AB558C /* ui.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ui.cpp; sourceTree = "<group>"; };
+		3BC8632D2BFE8B7600AB558C /* ui.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ui.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +130,7 @@
 		3B479D1D2BF5D370000C45FA /* MyMetalCPP */ = {
 			isa = PBXGroup;
 			children = (
+				3BC8632B2BFE8B1000AB558C /* UI */,
 				3BC863192BFBF10A00AB558C /* imgui */,
 				3B479D422BF7FAFA000C45FA /* Shaders */,
 				3B479D1E2BF5D370000C45FA /* main.cpp */,
@@ -191,6 +195,15 @@
 			path = imgui;
 			sourceTree = "<group>";
 		};
+		3BC8632B2BFE8B1000AB558C /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				3BC8632C2BFE8B7600AB558C /* ui.cpp */,
+				3BC8632D2BFE8B7600AB558C /* ui.hpp */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -251,6 +264,7 @@
 				3BC8631C2BFBF10A00AB558C /* imgui_impl_metal.mm in Sources */,
 				3BC8631E2BFBF10A00AB558C /* imgui_tables.cpp in Sources */,
 				3B479D442BF7FB12000C45FA /* MyShader.metal in Sources */,
+				3BC8632E2BFE8B7600AB558C /* ui.cpp in Sources */,
 				3B479D4A2BFAA379000C45FA /* Mandelbrot.metal in Sources */,
 				3BC863212BFBF10A00AB558C /* main.mm in Sources */,
 				3B479D482BF95F09000C45FA /* Math.cpp in Sources */,

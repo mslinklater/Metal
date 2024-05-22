@@ -54,5 +54,7 @@ private:
     dispatch_semaphore_t _semaphore;
     static const int kMaxFramesInFlight;
     
+    CGSize _viewportSize;
+    
     uint _animationIndex;
 };

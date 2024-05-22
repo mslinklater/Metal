@@ -11,11 +11,9 @@
 #include "Math.hpp"
 #include "Common.h"
 
-#if ENABLE_IMGUI
 #include "imgui.h"
-#include "imgui_impl_metal.h"
-#include "imgui_impl_osx.h"
-#endif
+
+#include "UI/ui.hpp"
 
 const int Renderer::kMaxFramesInFlight = 3;
 
@@ -310,7 +308,7 @@ void Renderer::update()
 
 void Renderer::resize( MTK::View* pView, CGSize size )
 {
-    std::cout << "Window resize: " << size.width << "x" << size.height << std::endl;
+    _viewportSize = size;
 }
 
 void Renderer::draw( MTK::View* pView )
@@ -319,10 +317,10 @@ void Renderer::draw( MTK::View* pView )
     using simd::float4;
     using simd::float4x4;
 
+    // Autorelease pool
     NS::AutoreleasePool* pPool = NS::AutoreleasePool::alloc()->init();
 
-    MTL::Buffer* pInstanceDataBuffer = _pInstanceDataBuffer[ _frame ];
-
+    // Command
     MTL::CommandBuffer* pCmd = _pCommandQueue->commandBuffer();
     dispatch_semaphore_wait( _semaphore, DISPATCH_TIME_FOREVER );
     Renderer* pRenderer = this;
@@ -330,6 +328,7 @@ void Renderer::draw( MTK::View* pView )
         dispatch_semaphore_signal( pRenderer->_semaphore );
     });
 
+    // Camera buffer
     MTL::Buffer* pCameraDataBuffer = _pCameraDataBuffer[ _frame ];
     CameraData* pCameraData = reinterpret_cast< CameraData *>( pCameraDataBuffer->contents() );
     pCameraData->perspectiveTransform = math::makePerspective( 45.f * M_PI / 180.f, 1.f, 0.03f, 500.0f ) ;
@@ -337,15 +336,30 @@ void Renderer::draw( MTK::View* pView )
     pCameraData->worldNormalTransform = math::discardTranslation( pCameraData->worldTransform );
     pCameraDataBuffer->didModifyRange( NS::Range::Make( 0, sizeof( CameraData ) ) );
 
+    // compute
     generateMandelbrotTexture();
 
     MTL::RenderPassDescriptor* pRpd = pView->currentRenderPassDescriptor();
     MTL::RenderCommandEncoder* pEnc = pCmd->renderCommandEncoder( pRpd );
 
+    // TODO - get viewport scaling working
+#if 0
+    MTL::Viewport viewport;
+    viewport.originX = 0.0;
+    viewport.originY = 0.0;
+    viewport.width = _viewportSize.width;
+    viewport.height = _viewportSize.height;
+    viewport.znear = 0.0;
+    viewport.zfar = 1.0;
+    pEnc->setViewport(viewport);
+#endif
+    
+    pEnc->pushDebugGroup( AAPLSTR( "3D Scene" ) );
     pEnc->setRenderPipelineState( _pPSO );
     pEnc->setDepthStencilState( _pDepthStencilState );
     
     pEnc->setVertexBuffer( _pVertexDataBuffer, /* offset */ 0, /* index */ 0 );
+    MTL::Buffer* pInstanceDataBuffer = _pInstanceDataBuffer[ _frame ];
     pEnc->setVertexBuffer( pInstanceDataBuffer, /* offset */ 0, /* index */ 1 );
     pEnc->setVertexBuffer( pCameraDataBuffer, /* offset */ 0, /* index */ 2 );
 
@@ -359,23 +373,17 @@ void Renderer::draw( MTK::View* pView )
                                 _pIndexBuffer,
                                 0,
                                 kNumInstances );
+    pEnc->popDebugGroup();
 
-#if ENABLE_IMGUI
-    ImGui_ImplMetal_NewFrame(pRpd);
-    ImGui_ImplOSX_NewFrame(pView);
-    ImGui::NewFrame();
-
+    // UI
+    UI::Instance()->NewFrame(pRpd, pEnc);
+    
     static bool show_demo_window = true;
-
     // 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
     if (show_demo_window)
         ImGui::ShowDemoWindow(&show_demo_window);
-
-    ImGui::Render();
-    ImDrawData* draw_data = ImGui::GetDrawData();
-
-    ImGui_ImplMetal_RenderDrawData(draw_data, pCmd, pEnc);
-#endif
+    
+    UI::Instance()->Draw(pCmd);
 
     pEnc->endEncoding();
     pCmd->presentDrawable( pView->currentDrawable() );

@@ -8,6 +8,8 @@
 * Integrate DearImGui
 * Add the physics in a weekend stuff
 * Look at Ray Tracing
+* Get viewport scaling working with window size change
+* Investigate imgui docked
 
 ## Notes
 
