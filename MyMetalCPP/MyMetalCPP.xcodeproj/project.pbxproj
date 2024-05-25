@@ -408,6 +408,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/metal-cpp",
 					"$(PROJECT_DIR)/metal-cpp-extensions",
+					"$(PROJECT_DIR)/MyMetalCPP/UI",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -422,6 +423,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/metal-cpp",
 					"$(PROJECT_DIR)/metal-cpp-extensions",
+					"$(PROJECT_DIR)/MyMetalCPP/UI",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

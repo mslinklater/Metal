@@ -1,31 +1,19 @@
 # README
 
-## TODO
+## Changes
 
 * Move the shaders out in to their own .metal files - DONE
+* Integrate DearImGui - DONE
+* Get viewport scaling working with window size change - DONE
+
+## TODO
+
 * Get rid of the temporary pointers - why are they there ? Seems a waste of space.
 * Abstract away a mesh object
-* Integrate DearImGui
 * Add the physics in a weekend stuff
 * Look at Ray Tracing
-* Get viewport scaling working with window size change
-* Investigate imgui docked
+* Multiple command buffers ?
 
 ## Notes
 
 * Idea - Compute procgen
-
-### 00
-
-### 01
-
-The vertex positions and colours are stored in two different buffers.
-The vertex shader just passes the vertex positions straight through without transform.
-
-### 02 - Arg Buffer
-
-The arg buffer stores two references to the two buffers from 01
-
-### 03 - Animation
-
-Added semaphor, per-frame data buffer

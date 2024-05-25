@@ -13,7 +13,7 @@
 
 #include "imgui.h"
 
-#include "UI/ui.hpp"
+#include "ui.hpp"
 
 const int Renderer::kMaxFramesInFlight = 3;
 
@@ -40,14 +40,17 @@ Renderer::~Renderer()
     _pShaderLibrary->release();
     _pDepthStencilState->release();
     _pVertexDataBuffer->release();
+    
     for ( int i = 0; i < kMaxFramesInFlight; ++i )
     {
         _pInstanceDataBuffer[i]->release();
     }
+    
     for ( int i = 0; i < kMaxFramesInFlight; ++i )
     {
         _pCameraDataBuffer[i]->release();
     }
+    
     _pIndexBuffer->release();
     _pPSO->release();
     _pComputePSO->release();
@@ -64,7 +67,6 @@ void Renderer::buildShaders()
     
     if ( !pLibrary )
     {
-        __builtin_printf( "%s", pError->localizedDescription()->utf8String() );
         assert( false );
     }
 
@@ -105,7 +107,6 @@ void Renderer::buildComputePipeline()
     pMandelbrotFn->release();
 }
 
-//void Renderer::generateMandelbrotTexture( MTL::CommandBuffer* pCommandBuffer )
 void Renderer::generateMandelbrotTexture()
 {
     MTL::CommandBuffer* pCommandBuffer = _pCommandQueue->commandBuffer();
@@ -331,7 +332,8 @@ void Renderer::draw( MTK::View* pView )
     // Camera buffer
     MTL::Buffer* pCameraDataBuffer = _pCameraDataBuffer[ _frame ];
     CameraData* pCameraData = reinterpret_cast< CameraData *>( pCameraDataBuffer->contents() );
-    pCameraData->perspectiveTransform = math::makePerspective( 45.f * M_PI / 180.f, 1.f, 0.03f, 500.0f ) ;
+    float aspect = _viewportSize.width / _viewportSize.height;
+    pCameraData->perspectiveTransform = math::makePerspective( 45.f * M_PI / 180.f, aspect, 0.03f, 500.0f ) ;
     pCameraData->worldTransform = math::makeIdentity();
     pCameraData->worldNormalTransform = math::discardTranslation( pCameraData->worldTransform );
     pCameraDataBuffer->didModifyRange( NS::Range::Make( 0, sizeof( CameraData ) ) );
@@ -342,18 +344,6 @@ void Renderer::draw( MTK::View* pView )
     MTL::RenderPassDescriptor* pRpd = pView->currentRenderPassDescriptor();
     MTL::RenderCommandEncoder* pEnc = pCmd->renderCommandEncoder( pRpd );
 
-    // TODO - get viewport scaling working
-#if 0
-    MTL::Viewport viewport;
-    viewport.originX = 0.0;
-    viewport.originY = 0.0;
-    viewport.width = _viewportSize.width;
-    viewport.height = _viewportSize.height;
-    viewport.znear = 0.0;
-    viewport.zfar = 1.0;
-    pEnc->setViewport(viewport);
-#endif
-    
     pEnc->pushDebugGroup( AAPLSTR( "3D Scene" ) );
     pEnc->setRenderPipelineState( _pPSO );
     pEnc->setDepthStencilState( _pDepthStencilState );

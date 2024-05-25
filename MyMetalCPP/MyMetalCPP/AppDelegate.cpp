@@ -10,7 +10,7 @@
 #include "MTKViewDelegate.hpp"
 #include "Common.h"
 
-#include "UI/ui.hpp"
+#include "ui.hpp"
 
 AppDelegate::~AppDelegate()
 {
