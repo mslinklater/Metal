@@ -14,10 +14,11 @@
 		3B479D322BF5D6EE000C45FA /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D302BF5D6EE000C45FA /* Renderer.cpp */; };
 		3B479D352BF5D743000C45FA /* MTKViewDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D332BF5D743000C45FA /* MTKViewDelegate.cpp */; };
 		3B479D392BF6A7B3000C45FA /* AppDelegate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D372BF6A7B3000C45FA /* AppDelegate.cpp */; };
-		3B479D412BF7F358000C45FA /* MetalDebugDump.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */; };
+		3B479D412BF7F358000C45FA /* MetalDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D3F2BF7F358000C45FA /* MetalDebug.cpp */; };
 		3B479D442BF7FB12000C45FA /* MyShader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D432BF7FB12000C45FA /* MyShader.metal */; };
 		3B479D482BF95F09000C45FA /* Math.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D462BF95F09000C45FA /* Math.cpp */; };
 		3B479D4A2BFAA379000C45FA /* Mandelbrot.metal in Sources */ = {isa = PBXBuildFile; fileRef = 3B479D492BFAA379000C45FA /* Mandelbrot.metal */; };
+		3B79FA5B2C12095A00D46B69 /* MetalHelpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3B79FA592C12095A00D46B69 /* MetalHelpers.cpp */; };
 		3BC8631A2BFBF10A00AB558C /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BC8630D2BFBF10A00AB558C /* imgui_demo.cpp */; };
 		3BC8631B2BFBF10A00AB558C /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3BC8630E2BFBF10A00AB558C /* imgui_draw.cpp */; };
 		3BC8631C2BFBF10A00AB558C /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3BC863102BFBF10A00AB558C /* imgui_impl_metal.mm */; };
@@ -62,13 +63,17 @@
 		3B479D3C2BF744E6000C45FA /* DOCS.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = DOCS.md; sourceTree = "<group>"; };
 		3B479D3D2BF7C8F7000C45FA /* metal-cpp */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "metal-cpp"; sourceTree = "<group>"; };
 		3B479D3E2BF7C8F7000C45FA /* metal-cpp-extensions */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "metal-cpp-extensions"; sourceTree = "<group>"; };
-		3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalDebugDump.cpp; sourceTree = "<group>"; };
-		3B479D402BF7F358000C45FA /* MetalDebugDump.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetalDebugDump.hpp; sourceTree = "<group>"; };
+		3B479D3F2BF7F358000C45FA /* MetalDebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalDebug.cpp; sourceTree = "<group>"; };
+		3B479D402BF7F358000C45FA /* MetalDebug.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetalDebug.hpp; sourceTree = "<group>"; };
 		3B479D432BF7FB12000C45FA /* MyShader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = MyShader.metal; sourceTree = "<group>"; };
 		3B479D452BF88C9C000C45FA /* ShaderStructs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderStructs.h; sourceTree = "<group>"; };
 		3B479D462BF95F09000C45FA /* Math.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Math.cpp; sourceTree = "<group>"; };
 		3B479D472BF95F09000C45FA /* Math.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Math.hpp; sourceTree = "<group>"; };
 		3B479D492BFAA379000C45FA /* Mandelbrot.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Mandelbrot.metal; sourceTree = "<group>"; };
+		3B6A6C9E2C12D668006524C3 /* MathsTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MathsTypes.h; sourceTree = "<group>"; };
+		3B6A6CA12C133B49006524C3 /* Defines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Defines.h; sourceTree = "<group>"; };
+		3B79FA592C12095A00D46B69 /* MetalHelpers.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MetalHelpers.cpp; sourceTree = "<group>"; };
+		3B79FA5A2C12095A00D46B69 /* MetalHelpers.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MetalHelpers.hpp; sourceTree = "<group>"; };
 		3BC8630C2BFBF10A00AB558C /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imconfig.h; sourceTree = "<group>"; };
 		3BC8630D2BFBF10A00AB558C /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_demo.cpp; sourceTree = "<group>"; };
 		3BC8630E2BFBF10A00AB558C /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = imgui_draw.cpp; sourceTree = "<group>"; };
@@ -130,21 +135,18 @@
 		3B479D1D2BF5D370000C45FA /* MyMetalCPP */ = {
 			isa = PBXGroup;
 			children = (
+				3B6A6CA02C1338D1006524C3 /* Renderer */,
+				3B6A6C9F2C12D704006524C3 /* Maths */,
 				3BC8632B2BFE8B1000AB558C /* UI */,
 				3BC863192BFBF10A00AB558C /* imgui */,
 				3B479D422BF7FAFA000C45FA /* Shaders */,
 				3B479D1E2BF5D370000C45FA /* main.cpp */,
-				3B479D302BF5D6EE000C45FA /* Renderer.cpp */,
-				3B479D312BF5D6EE000C45FA /* Renderer.hpp */,
 				3B479D332BF5D743000C45FA /* MTKViewDelegate.cpp */,
 				3B479D342BF5D743000C45FA /* MTKViewDelegate.hpp */,
 				3B479D362BF5D7F0000C45FA /* Common.h */,
 				3B479D372BF6A7B3000C45FA /* AppDelegate.cpp */,
 				3B479D382BF6A7B3000C45FA /* AppDelegate.hpp */,
-				3B479D3F2BF7F358000C45FA /* MetalDebugDump.cpp */,
-				3B479D402BF7F358000C45FA /* MetalDebugDump.hpp */,
-				3B479D462BF95F09000C45FA /* Math.cpp */,
-				3B479D472BF95F09000C45FA /* Math.hpp */,
+				3B6A6CA12C133B49006524C3 /* Defines.h */,
 			);
 			path = MyMetalCPP;
 			sourceTree = "<group>";
@@ -170,6 +172,29 @@
 				3B479D492BFAA379000C45FA /* Mandelbrot.metal */,
 			);
 			path = Shaders;
+			sourceTree = "<group>";
+		};
+		3B6A6C9F2C12D704006524C3 /* Maths */ = {
+			isa = PBXGroup;
+			children = (
+				3B479D462BF95F09000C45FA /* Math.cpp */,
+				3B479D472BF95F09000C45FA /* Math.hpp */,
+				3B6A6C9E2C12D668006524C3 /* MathsTypes.h */,
+			);
+			path = Maths;
+			sourceTree = "<group>";
+		};
+		3B6A6CA02C1338D1006524C3 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				3B79FA592C12095A00D46B69 /* MetalHelpers.cpp */,
+				3B79FA5A2C12095A00D46B69 /* MetalHelpers.hpp */,
+				3B479D3F2BF7F358000C45FA /* MetalDebug.cpp */,
+				3B479D402BF7F358000C45FA /* MetalDebug.hpp */,
+				3B479D302BF5D6EE000C45FA /* Renderer.cpp */,
+				3B479D312BF5D6EE000C45FA /* Renderer.hpp */,
+			);
+			path = Renderer;
 			sourceTree = "<group>";
 		};
 		3BC863192BFBF10A00AB558C /* imgui */ = {
@@ -271,13 +296,14 @@
 				3BC8631B2BFBF10A00AB558C /* imgui_draw.cpp in Sources */,
 				3B479D392BF6A7B3000C45FA /* AppDelegate.cpp in Sources */,
 				3B479D352BF5D743000C45FA /* MTKViewDelegate.cpp in Sources */,
-				3B479D412BF7F358000C45FA /* MetalDebugDump.cpp in Sources */,
+				3B479D412BF7F358000C45FA /* MetalDebug.cpp in Sources */,
 				3B479D322BF5D6EE000C45FA /* Renderer.cpp in Sources */,
 				3B479D1F2BF5D370000C45FA /* main.cpp in Sources */,
 				3BC8631D2BFBF10A00AB558C /* imgui_impl_osx.mm in Sources */,
 				3BC8631A2BFBF10A00AB558C /* imgui_demo.cpp in Sources */,
 				3BC8631F2BFBF10A00AB558C /* imgui_widgets.cpp in Sources */,
 				3BC863202BFBF10A00AB558C /* imgui.cpp in Sources */,
+				3B79FA5B2C12095A00D46B69 /* MetalHelpers.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +436,9 @@
 					"$(PROJECT_DIR)/metal-cpp-extensions",
 					"$(PROJECT_DIR)/MyMetalCPP/UI",
 				);
+				MTL_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Maths";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Maths";
 			};
 			name = Debug;
 		};
@@ -425,7 +453,9 @@
 					"$(PROJECT_DIR)/metal-cpp-extensions",
 					"$(PROJECT_DIR)/MyMetalCPP/UI",
 				);
+				MTL_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Maths";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				USER_HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/Maths";
 			};
 			name = Release;
 		};

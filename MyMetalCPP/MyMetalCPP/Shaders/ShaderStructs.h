@@ -10,30 +10,27 @@
 
 #include <simd/simd.h>
 
-//struct FrameData
-//{
-//   float angle;
-//};
+#include "../Maths/MathsTypes.h"
 
 struct VertexData
 {
-    simd::float3 position;
-    simd::float3 normal;
-    simd::float2 texcoord;
+    Vector3f position;
+    Vector3f normal;
+    Vector2f texcoord;
 };
 
 struct InstanceData // size 80 bytes
 {
-    simd::float4x4 instanceTransform;
-    simd::float3x3 instanceNormalTransform;
-    simd::float4 instanceColor;
+    Matrix44f instanceTransform;
+    Matrix33f instanceNormalTransform;
+    Vector4f instanceColor;
 };
 
 struct CameraData
 {
-    simd::float4x4 perspectiveTransform;
-    simd::float4x4 worldTransform;
-    simd::float3x3 worldNormalTransform;
+    Matrix44f perspectiveTransform;
+    Matrix44f worldTransform;
+    Matrix33f worldNormalTransform;
 };
 
 #endif /* ShaderStructs_h */
